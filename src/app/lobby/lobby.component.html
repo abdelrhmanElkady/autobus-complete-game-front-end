@@ -1,0 +1,25 @@
+<div class="container-fluid">
+    <div class="row justify-content-center pt-5 ">
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="type your name" #name (blur)="currentUsrName(name.value)">
+      </div>
+    </div>
+    <div class="row justify-content-center pt-3">
+        <div class="col-lg-6">
+            <div class="list-group">
+                <div *ngIf="allUsers.length > 0" class="list-group-item  list-group-item-info">online players</div>
+                <div *ngIf="allUsers.length == 0" class="list-group-item  list-group-item-danger">no one is online right now</div>
+
+                <div  class="list-group-item " *ngFor="let user of allUsers">
+                    {{user.name}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center pt-3">
+        <div class="text-center">
+            <button class="btn btn-primary" (click)="startGame()">start game</button>
+        </div>
+        
+    </div>
+</div>

@@ -1,0 +1,61 @@
+<div class="container-fluid mt-3">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-warning text-white" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="updateLeaderboard()">scores</button>
+                <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#MessagesModal">chat</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>
+
+
+<!-- Scores Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Leaderboard</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let user of allUsers">{{user.name}}:{{user.score}}</li>
+              </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages Modal -->
+<div class="modal fade" id="MessagesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Chat</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div  #scrollMe   style="overflow-y: scroll;height: 300px;overflow-wrap: break-word;" class="mt-4 border border-warning" *ngIf="messages.length >0">
+                <div  *ngFor="let message of messages" [ngClass]="message.mine ? 'text-end ':''" >
+                  <small *ngIf="message.user">{{message.user}}</small>
+                  <small *ngIf="!message.user">anonymous</small>
+                 <div class="text-white" [ngClass]="message.mine ? 'bg-primary p-2 me-2 rounded-pill':'bg-success p-2  ms-2 rounded-pill'">{{message.text}}</div>
+                  </div>
+              </div>
+              <div class="mt-2">
+                <input #messageText type="text" class="form-control" placeholder="enter your  message">
+                <div class="mt-2 text-center">
+                    <button class="btn btn-primary" (click)="sendMessage(messageText.value);messageText.value ='' ">send</button>
+                </div>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>

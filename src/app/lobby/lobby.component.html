@@ -1,7 +1,9 @@
 <div class="container-fluid">
     <div class="row justify-content-center pt-5 ">
-      <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="type your name" #name (blur)="currentUsrName(name.value)">
+      <div class="col-md-6 text-center">
+        <input type="text" class="form-control" placeholder="type your name" #name>
+        <button type="button" class="btn btn-success mt-2" (click)="currentUsrName(name.value)">go online</button>
+
       </div>
     </div>
     <div class="row justify-content-center pt-3">
@@ -16,7 +18,7 @@
             </div>
         </div>
     </div>
-    <div class="row justify-content-center pt-3">
+    <div *ngIf="allUsers.length" class="row justify-content-center pt-3">
         <div class="text-center">
             <button class="btn btn-primary" (click)="startGame()">start game</button>
         </div>

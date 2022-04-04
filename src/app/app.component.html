@@ -4,7 +4,12 @@
             
             <div class="d-flex justify-content-between">
                 <button class="btn btn-warning text-white" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="updateLeaderboard()">scores</button>
-                <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#MessagesModal">chat</button>
+                <button class="btn btn-info text-white position-relative" data-bs-toggle="modal" data-bs-target="#MessagesModal"
+                (click)="unReadMessages = false">chat
+                  <span *ngIf="unReadMessages && newUnReadMessages" class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                    <span class="visually-hidden">New alerts</span>
+                  </span>
+                </button>
             </div>
 
         </div>

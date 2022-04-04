@@ -12,7 +12,7 @@ export class HubService {
   hubConnection:signalR.HubConnection = new signalR.HubConnectionBuilder()
     .configureLogging(signalR.LogLevel.Information)
    .withUrl("https://autobus-complete.herokuapp.com/GameHub"
-  //  .withUrl("http://localhost:5076/GameHub"
+    // .withUrl("http://localhost:5076/GameHub"
     // , {
     //   skipNegotiation: true,
     //   transport: signalR.HttpTransportType.WebSockets

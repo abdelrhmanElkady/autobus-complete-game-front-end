@@ -16,6 +16,7 @@ export class AppComponent implements OnDestroy,AfterViewChecked{
 
   allUsers:User[]=[]
   messages:Message[]=[]
+  unReadMessages:boolean = false;
 
   usersSub:Subscription = new Subscription();
   messageSub:Subscription = new Subscription();
@@ -27,6 +28,7 @@ export class AppComponent implements OnDestroy,AfterViewChecked{
     
    this.messageSub = this.hubService.chatMessagesObservable.subscribe(res =>{
       this.messages = res;
+      this.unReadMessages = true;
     })
   }
 
@@ -50,6 +52,12 @@ sendMessage(messageText:string){
   this.hubService.sendMessage(messageText)
 }
 
+get newUnReadMessages(){
+  if(this.messages[this.messages.length-1].mine){
+    return false
+  }
+  return true
+}
   ngOnDestroy(): void {
     this.usersSub.unsubscribe();
     this.messageSub.unsubscribe();

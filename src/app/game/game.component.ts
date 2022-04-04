@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Answer } from '../models/answer.model';
 import { HubService } from '../services/hub.service';
+import {LocationStrategy} from '@angular/common';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css']
 })
-export class GameComponent implements OnDestroy {
+export class GameComponent implements OnDestroy,OnInit {
 
   answersForm = this.formBuilder.group({
     boy:[''],
@@ -25,7 +26,13 @@ export class GameComponent implements OnDestroy {
 
   autobusSub:Subscription = new Subscription();
 
-  constructor(private formBuilder:FormBuilder,private hubSerivce:HubService,private router:Router) {
+  constructor(private formBuilder:FormBuilder,private hubSerivce:HubService,private router:Router,private Location: LocationStrategy) {
+
+    // disable the browser’s back button
+    history.pushState(null, '', window.location.href);
+    this.Location.onPopState(() => {
+    history.pushState(null, '', window.location.href);
+    });
 
    this.autobusSub =  this.hubSerivce.autobusObservable.subscribe(()=>{
       this.answers = this.answersForm.value;
@@ -35,7 +42,14 @@ export class GameComponent implements OnDestroy {
     })
    }
   
-
+   ngOnInit(): void {
+    // prevent page refresh
+    window.addEventListener("beforeunload", function (e) {
+        var confirmationMessage = "if you refresh you will leave the game ";
+        e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
+        return confirmationMessage;              // Gecko, WebKit, Chrome <34
+    });
+  }
   
 
   autobusComplete(){

@@ -43,12 +43,12 @@ export class GameComponent implements OnDestroy,OnInit {
    }
   
    ngOnInit(): void {
-    // prevent page refresh
-    window.addEventListener("beforeunload", function (e) {
-        var confirmationMessage = "if you refresh you will leave the game ";
-        e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
-        return confirmationMessage;              // Gecko, WebKit, Chrome <34
-    });
+  // prevent page refresh //------------ uncomment this when publishing -----------------------------------------
+  window.addEventListener("beforeunload", function (e) {
+    var confirmationMessage = "if you refresh you will leave the game ";
+    e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
+    return confirmationMessage;              // Gecko, WebKit, Chrome <34
+});
   }
   
 

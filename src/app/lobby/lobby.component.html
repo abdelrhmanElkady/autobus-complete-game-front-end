@@ -1,13 +1,52 @@
 <div class="container-fluid">
-    <div class="row justify-content-center pt-5 ">
-      <div class="col-md-6 text-center">
-        <input type="text" class="form-control" placeholder="type your name" #name>
-        <button type="button" class="btn btn-success mt-2" (click)="currentUsrName(name.value)">go online</button>
-
-      </div>
-    </div>
+    
     <div class="row justify-content-center pt-3">
-        <div class="col-lg-6">
+        <div class="col-md-6 text-center">
+            <h2>available rooms</h2>
+            <!-- Button trigger createRoomModal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createRoomModal">
+                create room
+            </button>
+        </div>
+    </div>
+
+    <div class="row justify-content-center pt-3">
+        <div class="col-md-6">
+            <div class="list-group">
+                <div *ngIf="allGroups.length > 0" class="list-group-item  list-group-item-info">online rooms</div>
+                <div *ngIf="allGroups.length == 0" class="list-group-item  list-group-item-danger">no room is online right now</div>
+
+                <div class="accordion" id="accordionExample">
+                    <div *ngFor="let room of allGroups;let i = index;" class="accordion-item">
+                        <h2 class="accordion-header d-flex" id="headingTwo">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" attr.data-bs-target="#{{'myString' + room.name.substring(0, room.name.indexOf(' '))+i}}" aria-expanded="false" >
+                             {{room.name}} ({{room.users.length}} players)
+                          </button>
+                          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#JoinModal" (click)="setCurrentRoom(room.name)">Join</button>
+                          
+                          <button *ngIf="showElement(room.users)"  class="btn btn-primary" (click)="startGame(room)">start game</button>
+                        
+                        </h2>
+                        <!-- i'm using the id like this cuz i need a uniuq id and substring could return empty string if there is no white spaces -->
+                        <div [id]="'myString' + room.name.substring(0, room.name.indexOf(' ')) + i" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                          <div class="accordion-body">
+                            <div class="list-group">
+                                <div  class="list-group-item " *ngFor="let user of room.users">
+                                    {{user.name}}
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    
+                    
+                  </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center pt-3">
+        <div class="col-md-6">
             <div class="list-group">
                 <div *ngIf="allUsers.length > 0" class="list-group-item  list-group-item-info">online players</div>
                 <div *ngIf="allUsers.length == 0" class="list-group-item  list-group-item-danger">no one is online right now</div>
@@ -18,10 +57,50 @@
             </div>
         </div>
     </div>
-    <div *ngIf="allUsers.length" class="row justify-content-center pt-3">
-        <div class="text-center">
-            <button class="btn btn-primary" (click)="startGame()">start game</button>
-        </div>
-        
-    </div>
+    
 </div>
+
+<!-- createRoomModal -->
+<div class="modal fade" id="createRoomModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form [formGroup]="createRoomForm" (ngSubmit)="createRoom()">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Enter room name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" placeholder="enter room name" formControlName = "roomName">
+                <input type="text" class="form-control mt-2" placeholder="enter your name" formControlName = "ownerName">
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalButton">Close</button>
+            <button type="submit" class="btn btn-primary" >CreateRoom</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- joinModal -->
+<div class="modal fade" id="JoinModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Enter your name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <input type="text" class="form-control mt-2" placeholder="enter your name" #userName>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeJoinModalButton">Close</button>
+            <button type="button" class="btn btn-primary" (click)="joinRoom(userName.value)" >Join</button>
+            </div>
+        
+      </div>
+    </div>
+  </div>

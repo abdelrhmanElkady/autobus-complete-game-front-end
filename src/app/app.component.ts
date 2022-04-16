@@ -1,5 +1,6 @@
 import { AfterViewChecked, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Group } from './models/group.model';
 import { Message } from './models/message.model';
 import { User } from './models/user.model';
 import { HubService } from './services/hub.service';
@@ -14,16 +15,24 @@ export class AppComponent implements OnDestroy,AfterViewChecked{
   
   @ViewChild('scrollMe') private myScrollContainer: ElementRef | undefined;
 
-  allUsers:User[]=[]
+  roomUsers:User[]=[]
+  
   messages:Message[]=[]
   unReadMessages:boolean = false;
 
-  usersSub:Subscription = new Subscription();
+
+  
+  roomUsersSub:Subscription = new Subscription();
   messageSub:Subscription = new Subscription();
 
   constructor(private hubService:HubService){
-    this.usersSub = this.hubService.usersObservable.subscribe(res=>{
-      this.allUsers = res
+   
+    this.roomUsersSub = this.hubService.roomUsersObservable.subscribe(res=>{
+      
+      this.roomUsers = res
+
+      //sorting the list ascendingly
+      this.roomUsers.sort((a, b) => (a.score < b.score) ? 1 : -1)
     })
     
    this.messageSub = this.hubService.chatMessagesObservable.subscribe(res =>{
@@ -33,7 +42,7 @@ export class AppComponent implements OnDestroy,AfterViewChecked{
   }
 
   updateLeaderboard(){
-    this.hubService.hubConnection.invoke("GetAllUsers");
+    this.hubService.hubConnection.invoke("GetRoomUsers");
   }
 
   ngAfterViewChecked(): void {
@@ -59,7 +68,8 @@ get newUnReadMessages(){
   return true
 }
   ngOnDestroy(): void {
-    this.usersSub.unsubscribe();
+    this.roomUsersSub.unsubscribe();
     this.messageSub.unsubscribe();
+   
   }
 }

@@ -28,7 +28,9 @@
         </div>
         <div class="modal-body">
             <ul class="list-group">
-                <li class="list-group-item" *ngFor="let user of allUsers">{{user.name}}:{{user.score}}</li>
+                <li class="list-group-item" *ngFor="let user of roomUsers;let i = index">
+                 ({{i+1}}) {{user.name}} : {{user.score}}
+                </li>
               </ul>
         </div>
         <div class="modal-footer">
